@@ -15,19 +15,12 @@
             padding: 20px;
         }
 
-        h1 {
-            color: #ffcc00; /* Amarillo/Dorado */
-            margin-top: 50px;
-        }
-
-        p {
-            font-size: 1.1em;
-            margin-bottom: 30px;
-        }
+        h1 { color: #ffcc00; margin-top: 50px; }
+        p { font-size: 1.1em; margin-bottom: 30px; }
 
         .cloudinary-form-button {
-            background-color: #ffcc00; /* Amarillo */
-            color: #004d9c; /* Texto Azul */
+            background-color: #ffcc00;
+            color: #004d9c;
             border: none;
             padding: 15px 30px;
             text-align: center;
@@ -42,7 +35,7 @@
         }
 
         .cloudinary-form-button:hover {
-            background-color: #ff9900; /* Amarillo más oscuro al pasar el ratón */
+            background-color: #ff9900;
         }
         
         /* Oculta el input de archivo por defecto */
@@ -55,7 +48,7 @@
     <h1>¡Sube tu foto de Conquistadores aquí! ⚜️</h1>
     <p>Haz clic en el botón, selecciona tu imagen y compártela con nosotros para la página de Instagram.</p>
 
-    <form action="https://api.cloudinary.com/v1_1/dwvfvatr8/auto/upload" method="POST" enctype="multipart/form-data" target="_self">
+    <form action="https://api.cloudinary.com/v1_1/dwvfvatr8/upload" method="POST" enctype="multipart/form-data" target="_self">
         
         <input type="hidden" name="upload_preset" value="fotos_qr_conquis">
 
