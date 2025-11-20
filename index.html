@@ -6,18 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <style>
-        /* COLORES DE CONQUISTADORES: Azul y Amarillo */
         body {
             font-family: Arial, sans-serif;
-            background-color: #004d9c; /* Azul oscuro */
-            color: #ffffff; /* Blanco */
+            background-color: #004d9c;
+            color: #ffffff;
             text-align: center;
             padding: 20px;
         }
-
         h1 { color: #ffcc00; margin-top: 50px; }
         p { font-size: 1.1em; margin-bottom: 30px; }
-
         .cloudinary-form-button {
             background-color: #ffcc00;
             color: #004d9c;
@@ -33,42 +30,83 @@
             border-radius: 8px;
             transition: background-color 0.3s;
         }
-
         .cloudinary-form-button:hover {
             background-color: #ff9900;
         }
-        
-        /* Oculta el input de archivo por defecto */
         #file_input {
             display: none;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success {
+            background-color: #28a745;
+        }
+        .error {
+            background-color: #dc3545;
         }
     </style>
 </head>
 <body>
     <h1>¡Sube tu foto de Conquis aquí! ⚜️</h1>
     <p>Haz clic en el botón, selecciona tu imagen y compártela con nosotros para la página de Instagram.</p>
-
-    <form action="https://api.cloudinary.com/v1_1/dwvfvatr8/upload" method="POST" enctype="multipart/form-data" target="_self">
-        
-        <input type="hidden" name="upload_preset" value="fotos_qr_conquis">
-
-        <input type="file" name="file" id="file_input" accept="image/*" required>
-
-        <label for="file_input" class="cloudinary-form-button">
-            Subir Foto Ahora
-        </label>
-        
-        <script>
-            document.getElementById('file_input').onchange = function() {
-                // Al seleccionar un archivo, cambia el texto del "botón"
-                document.querySelector('label.cloudinary-form-button').innerText = 'Subiendo...';
+    
+    <input type="file" id="file_input" accept="image/*">
+    <label for="file_input" class="cloudinary-form-button" id="upload_button">
+        Subir Foto Ahora
+    </label>
+    
+    <div id="message" class="message"></div>
+    
+    <script>
+        document.getElementById('file_input').onchange = async function() {
+            const file = this.files[0];
+            if (!file) return;
+            
+            const button = document.getElementById('upload_button');
+            const messageDiv = document.getElementById('message');
+            
+            button.innerText = 'Subiendo...';
+            button.style.backgroundColor = '#999';
+            messageDiv.style.display = 'none';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'fotos_qr_conquis');
+            
+            try {
+                const response = await fetch('https://api.cloudinary.com/v1_1/dwvfvatr8/image/upload', {
+                    method: 'POST',
+                    body: formData
+                });
                 
-                // Envía el formulario automáticamente. Cloudinary devolverá un JSON o un error 401.
-                this.form.submit();
-            };
-        </script>
-        
-    </form>
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.className = 'message success';
+                    messageDiv.innerText = '¡Foto subida exitosamente! ✅';
+                    messageDiv.style.display = 'block';
+                    button.innerText = 'Subir Otra Foto';
+                    button.style.backgroundColor = '#ffcc00';
+                    console.log('URL de la imagen:', data.secure_url);
+                } else {
+                    throw new Error(data.error.message);
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.innerText = '❌ Error: ' + error.message;
+                messageDiv.style.display = 'block';
+                button.innerText = 'Intentar de Nuevo';
+                button.style.backgroundColor = '#ffcc00';
+                console.error('Error completo:', error);
+            }
+            
+            // Limpiar el input
+            this.value = '';
+        };
+    </script>
 </body>
 </html>
-
