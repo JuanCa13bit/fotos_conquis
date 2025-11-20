@@ -55,19 +55,31 @@
     <button id="upload_widget" class="cloudinary-button">Subir Foto Ahora</button>
 
     <script type="text/javascript">
-        var myWidget = cloudinary.createUploadWidget({
-            cloudName: "dwvfvatr8", 
-            uploadPreset: "fotos_qr_conquis" 
-        }, (error, result) => {
-            if (!error && result && result.event === "success") {
-                alert("¡Tu foto ha sido subida con éxito! ¡Gracias por tu lealtad! ⚜️");
+        // ESTA FUNCIÓN ESPERA A QUE TODOS LOS SCRIPTS ESTÉN CARGADOS.
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Verificamos si la librería de Cloudinary ya está disponible
+            if (typeof cloudinary !== 'undefined') {
+                var myWidget = cloudinary.createUploadWidget({
+                    // TUS CREDENCIALES
+                    cloudName: "dwvfvatr8", 
+                    uploadPreset: "fotos_qr_conquis" 
+                }, (error, result) => {
+                    if (!error && result && result.event === "success") {
+                        alert("¡Tu foto ha sido subida con éxito! ¡Gracias por tu lealtad! ⚜️");
+                    }
+                });
+
+                // Inicialización del botón
+                document.getElementById("upload_widget").addEventListener("click", function(){
+                    myWidget.open();
+                }, false);
+            } else {
+                console.error("Error crítico: El script de Cloudinary no se ha definido.");
+                // Opcional: Deshabilitar el botón si falla
+                document.getElementById("upload_widget").disabled = true;
+                document.getElementById("upload_widget").innerText = "Error de Carga";
             }
         });
-
-        // Este código espera que el widget de Cloudinary se haya cargado.
-        document.getElementById("upload_widget").addEventListener("click", function(){
-            myWidget.open();
-        }, false);
     </script>
 </body>
 </html>
