@@ -63,7 +63,7 @@
                 // Al seleccionar un archivo, cambia el texto del "botón"
                 document.querySelector('label.cloudinary-form-button').innerText = 'Subiendo...';
                 
-                // Envía el formulario automáticamente
+                // Envía el formulario automáticamente. Cloudinary devolverá un JSON o un error 401.
                 this.form.submit();
             };
         </script>
