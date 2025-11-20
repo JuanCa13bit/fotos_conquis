@@ -7,70 +7,74 @@
     
     <style>
         /* COLORES DE CONQUISTADORES: Azul y Amarillo */
-        body { font-family: Arial, sans-serif; background-color: #004d9c; color: #ffffff; text-align: center; padding: 20px; }
-        h1 { color: #ffcc00; margin-top: 50px; }
-        p { font-size: 1.1em; margin-bottom: 30px; }
-        #upload_widget { background-color: #ffcc00; color: #004d9c; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 8px; }
-        #upload_widget:hover { background-color: #ff9900; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #004d9c; /* Azul oscuro */
+            color: #ffffff; /* Blanco */
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ffcc00; /* Amarillo/Dorado */
+            margin-top: 50px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .cloudinary-form-button {
+            background-color: #ffcc00; /* Amarillo */
+            color: #004d9c; /* Texto Azul */
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .cloudinary-form-button:hover {
+            background-color: #ff9900; /* Amarillo más oscuro al pasar el ratón */
+        }
+        
+        /* Oculta el input de archivo por defecto */
+        #file_input {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>¡Sube tu foto de Conquis aqui! ⚜️</h1>
-    <p>Haz clic en el boton, selecciona tu imagen y compartela con nosotros para la pagina de Instagram.</p>
+    <h1>¡Sube tu foto de Conquistadores aquí! ⚜️</h1>
+    <p>Haz clic en el botón, selecciona tu imagen y compártela con nosotros para la página de Instagram.</p>
 
-    <button id="upload_widget" class="cloudinary-button">Subir Foto Ahora</button>
+    <form action="https://api.cloudinary.com/v1_1/dwvfvatr8/auto/upload" method="POST" enctype="multipart/form-data" target="_self">
+        
+        <input type="hidden" name="upload_preset" value="fotos_qr_conquis">
 
-    <script type="text/javascript">
-        // TUS CREDENCIALES
-        const CLOUD_NAME = "dwvfvatr8"; 
-        const UPLOAD_PRESET = "fotos_qr_conquis";
+        <input type="file" name="file" id="file_input" accept="image/*" required>
 
-        function openCloudinaryUpload() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            
-            input.onchange = async (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', UPLOAD_PRESET);
-
-                document.getElementById('upload_widget').innerText = "Subiendo...";
+        <label for="file_input" class="cloudinary-form-button">
+            Subir Foto Ahora
+        </label>
+        
+        <script>
+            document.getElementById('file_input').onchange = function() {
+                // Al seleccionar un archivo, cambia el texto del "botón"
+                document.querySelector('label.cloudinary-form-button').innerText = 'Subiendo...';
                 
-                try {
-                    const response = await fetch(
-                        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`,
-                        {
-                            method: 'POST',
-                            body: formData,
-                            // AÑADIMOS EL HEADER EXPLÍCITO DE ORIGEN (CORS)
-                            headers: {
-                                'Access-Control-Allow-Origin': 'https://juanca13bit.github.io'
-                            }
-                        }
-                    );
-
-                    if (response.ok) {
-                        alert("Subida exitosa. ¡Gracias por tu lealtad! ⚜️");
-                    } else if (response.status === 401) {
-                         alert("Error 401 (No autorizado). El dominio no está permitido en Cloudinary.");
-                    } else {
-                        alert("Error al subir la foto. Código: " + response.status);
-                    }
-                } catch (error) {
-                    alert("Hubo un error de conexión.");
-                } finally {
-                    document.getElementById('upload_widget').innerText = "Subir Foto Ahora";
-                }
+                // Envía el formulario automáticamente
+                this.form.submit();
             };
-            
-            input.click();
-        }
-
-        document.getElementById("upload_widget").addEventListener("click", openCloudinaryUpload);
-    </script>
+        </script>
+        
+    </form>
 </body>
 </html>
