@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sube tu Foto para el QR</title>
+    <title>Sube tu Foto aquí</title>
 </head>
 <body>
     <h1>¡Sube tu foto aquí!</h1>
@@ -12,18 +12,15 @@
     <script src="https://upload-widget.cloudinary.com/global/2.0/global.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        // La configuración CLAVE
         var myWidget = cloudinary.createUploadWidget({
-            cloudName: "dwvfvatr8", // Tu Cloud Name
-            uploadPreset: "fotos_qr_conquis" // Tu Preset Sin Firmar
+            cloudName: "dwvfvatr8", 
+            uploadPreset: "fotos_qr_conquis"
         }, (error, result) => {
             if (!error && result && result.event === "success") {
-                console.log('Subida exitosa:', result.info);
                 alert("¡Tu foto ha sido subida con éxito! ¡Muchas gracias!");
             }
         });
 
-        // Evento para abrir el widget
         document.getElementById("upload_widget").addEventListener("click", function(){
             myWidget.open();
         }, false);
